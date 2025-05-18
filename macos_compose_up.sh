@@ -6,6 +6,14 @@ export DOCKER_BUILDKIT=1
 export COMPOSE_DOCKER_CLI_BUILD=1
 export DOCKER_BUILDX_BUILDER=container
 
+# Create private builder if it doesn't exist
+if ! docker buildx inspect mybuilder &>/dev/null; then
+    echo "Creating a new Docker Buildx builder named 'mybuilder'..."
+    docker buildx create --name mybuilder --use
+else
+    echo "Using existing Docker Buildx builder 'mybuilder'."
+fi
+
 # Build images and start services
 docker compose build
 docker compose up -d
