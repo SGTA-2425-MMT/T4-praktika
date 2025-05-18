@@ -50,6 +50,21 @@ This project is for educational use only. All assets and code are original, publ
 - Dockerized deployment
 - All assets (images, sounds) are original or AI-generated for educational use
 
+
+## Cloning the Repository
+
+This project uses git submodules for the `frontend` and `backend` directories. To clone the repository and initialize all submodules, run:
+
+```pwsh
+git clone --recurse-submodules <repository-url>
+```
+
+If you have already cloned the repository without submodules, initialize them with:
+
+```pwsh
+git submodule update --init --recursive
+```
+
 ## Setup & Deployment
 
 ### Prerequisites
