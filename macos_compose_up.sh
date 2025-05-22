@@ -1,6 +1,10 @@
 #!/usr/bin/env bash
 set -e
 
+# Configurar submódulos para usar las ramas correctas
+echo "Configurando submódulos para usar las ramas específicas..."
+./setup_modules.sh
+
 # Enable BuildKit and the Compose CLI builder
 export DOCKER_BUILDKIT=1
 export COMPOSE_DOCKER_CLI_BUILD=1

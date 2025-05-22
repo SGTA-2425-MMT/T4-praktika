@@ -1,8 +1,8 @@
 [submodule "frontend"]
 	path = frontend
 	url = git@github.com:SGTA-2425-MMT/T4-Praktika-frontend.git
-	branch = main
+	branch = feature/cambios
 [submodule "backend"]
 	path = backend
 	url = git@github.com:SGTA-2425-MMT/T4-Praktika-backend.git
-	branch = main
+	branch = feat/prueba

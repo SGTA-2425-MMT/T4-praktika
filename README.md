@@ -53,16 +53,42 @@ This project is for educational use only. All assets and code are original, publ
 
 ## Cloning the Repository
 
-This project uses git submodules for the `frontend` and `backend` directories. To clone the repository and initialize all submodules, run:
+This project uses git submodules for the `frontend` and `backend` directories. The frontend submódulo apunta a la rama `feature/cambios` y el backend a la rama `feat/prueba`.
 
-```pwsh
-git clone --recurse-submodules <repository-url>
+Para clonar el repositorio e inicializar correctamente los submódulos con las ramas específicas, sigue estos pasos:
+
+```bash
+# Clonar el repositorio principal
+git clone <repository-url>
+cd <repository-directory>
+
+# Ejecutar el script de configuración de submódulos
+./setup_modules.sh
 ```
 
-If you have already cloned the repository without submodules, initialize them with:
+El script `setup_modules.sh` se encargará de:
+1. Inicializar los submódulos
+2. Cambiar cada submódulo a la rama correcta (frontend: feature/cambios, backend: feat/prueba)
+3. Actualizar los submódulos con el contenido más reciente de esas ramas
 
-```pwsh
-git submodule update --init --recursive
+Si prefieres hacerlo manualmente:
+
+```bash
+# Inicializar submódulos
+git submodule init
+git submodule update
+
+# Configurar backend para usar la rama feat/prueba
+cd backend
+git checkout feat/prueba
+git pull origin feat/prueba
+cd ..
+
+# Configurar frontend para usar la rama feature/cambios
+cd frontend
+git checkout feature/cambios
+git pull origin feature/cambios
+cd ..
 ```
 
 ## Setup & Deployment
@@ -82,17 +108,38 @@ See the official installation instructions for your operating system at: https:/
 After installation, ensure the MongoDB service is running on port 27017.
 
 ### Environment Variables
-Create a `.env` file in the root with:
+Copia el archivo `.env.template` a un nuevo archivo llamado `.env`:
+
+```bash
+cp .env.template .env
 ```
-MONGODB_URI=mongodb://localhost:27017/civgame
-KEYCLOAK_BASE_URL=...
-KEYCLOAK_REALM=...
-KEYCLOAK_CLIENT_ID=...
-KEYCLOAK_CLIENT_SECRET=...
-KEYCLOAK_ADMIN_CLIENT_ID=...
-KEYCLOAK_ADMIN_CLIENT_SECRET=...
-GROQ_API_KEY=...
-```
+
+Luego, edita el archivo `.env` para configurar las variables de entorno necesarias:
+
+#### Variables Esenciales:
+
+1. **MONGODB_URI**: URI de conexión a MongoDB
+   - Para MongoDB local: `mongodb://localhost:27017/civgame`
+   - Para MongoDB Atlas: `mongodb+srv://<username>:<password>@<cluster-address>/civgame`
+
+2. **SECRET_KEY**: Clave secreta para JWT (ya incluye un valor por defecto)
+   - Para generar una nueva: `openssl rand -hex 32` en terminal
+   - O en Python: `import secrets; print(secrets.token_hex(32))`
+
+3. **GROQ_API_KEY**: Clave API para las funciones de IA
+   - Obtener en: [https://console.groq.com/keys](https://console.groq.com/keys)
+   - Si no se proporciona, las funciones de IA no estarán disponibles
+
+#### Variables Opcionales (si se usa Keycloak):
+
+- **KEYCLOAK_BASE_URL**: URL base de tu servidor Keycloak
+- **KEYCLOAK_REALM**: Nombre del realm en Keycloak
+- **KEYCLOAK_CLIENT_ID**: ID del cliente en Keycloak
+- **KEYCLOAK_CLIENT_SECRET**: Secreto del cliente en Keycloak
+- **KEYCLOAK_ADMIN_CLIENT_ID**: ID del cliente admin en Keycloak
+- **KEYCLOAK_ADMIN_CLIENT_SECRET**: Secreto del cliente admin en Keycloak
+
+> Nota: El archivo `.env.template` contiene todas estas variables con comentarios explicativos.
 
 ### Build & Run (Docker Compose)
 ```pwsh
